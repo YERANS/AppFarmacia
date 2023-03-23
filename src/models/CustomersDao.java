@@ -46,7 +46,7 @@ public class CustomersDao {
         }
     }  
     
-    //LISTAR CLIENTE
+    //METODO LISTAR CLIENTE
     public List listCustomerQuery(String value){
         List<Customers> list_customers = new ArrayList();
         String query = "SELECT * FROM customers ";
@@ -77,5 +77,46 @@ public class CustomersDao {
             
         }
         return list_customers;
+    }
+    
+    //METODO MODIFICAR CLIENTE
+    public boolean updateCustomerQuery(Customers customer){
+        String query = "UPDATE customers SET full_name = ?, address = ?, telephone = ?, email = ?, updated = ? "
+                + "WHERE id = ?";
+        
+        Timestamp datetime = new Timestamp(new Date().getTime());
+        
+        try {
+            conn = cn.getConnection();
+            pst = conn.prepareStatement(query);            
+            pst.setString(1, customer.getFull_name());
+            pst.setString(2, customer.getAddress());
+            pst.setString(3, customer.getTelephone());
+            pst.setString(4, customer.getEmail());
+            pst.setTimestamp(5, datetime);
+            pst.setInt(6, customer.getId());
+            pst.execute();
+            return true;
+         
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "error al modificar los datos del cliente");
+            return false;
+        }
+    }
+    
+    //METODO ELIMINAR CLIENTE
+    public boolean deleteCustomerQuery(int id) {
+        String query = "DELETE FROM customers WHERE id = " + id;
+        
+        try {
+            conn = cn.getConnection();
+            pst = conn.prepareStatement(query);
+            pst.execute();
+            return true;
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "no puede eliminar un cliente que tenga relacion con otra tabla");            
+            return false;
+        }   
+               
     }
 }
