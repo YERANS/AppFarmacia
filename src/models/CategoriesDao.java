@@ -91,18 +91,18 @@ public class CategoriesDao {
     }
     
     //METODO PARA ELIMINAR CATEGORIA
-    public boolean deleteCategoryQuery(int id) {
-        String query = "DELETE FROM categories WHERE id = " + id;
-        
-        try {
-            conn = cn.getConnection();
-            pst = conn.prepareStatement(query);
-            pst.execute();
-            return true;
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "no puede eliminar una categoria que tenga relacion con otra tabla");            
-            return false;
-        }   
-               
-    }
+        public boolean deleteCategoryQuery(int id) {
+            String query = "DELETE FROM categories WHERE id = " + id;
+
+            try {
+                conn = cn.getConnection();
+                pst = conn.prepareStatement(query);
+                pst.execute();
+                return true;
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "no puede eliminar una categoria que tenga relacion con otra tabla");            
+                return false;
+            }   
+
+        }
 }
