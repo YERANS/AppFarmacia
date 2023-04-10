@@ -4,7 +4,15 @@
  */
 package views;
 
+import controllers.CustomersController;
+import controllers.EmployeesController;
 import controllers.SettingsController;
+import models.Customers;
+import models.CustomersDao;
+import models.Employees;
+import models.EmployeesDao;
+import static models.EmployeesDao.full_name_user;
+import static models.EmployeesDao.rol_user;
 
 /**
  *
@@ -12,19 +20,38 @@ import controllers.SettingsController;
  */
 public class SystemView extends javax.swing.JFrame {
 
-    /**
-     * Creates new form SystemView
-     */
+    //empleados
+    Employees employee  = new Employees();
+    EmployeesDao employeesDao = new EmployeesDao();
+    //clientes
+    Customers customer = new Customers();
+    CustomersDao customersDao = new CustomersDao();
+    
     public SystemView() {
         initComponents();
         setSize(1208, 680);
-        setResizable(false);
-        setTitle("panel de administración");
+        setResizable(false);        
         setLocationRelativeTo(null);
+        titleInterface();
         
         //controlador del settings
         SettingsController setting = new SettingsController(this);
         this.repaint();
+        
+        
+        //controlador del empleado
+        EmployeesController employee_acount = new EmployeesController(employee, employeesDao, this);
+        employee_acount.listAllEmployees();
+        
+        //Controlador de clientes
+        CustomersController customer_account = new CustomersController (customer, customersDao, this);
+    }
+    
+    public String titleInterface(){
+        setTitle("Panel = " + rol_user);
+        label_name_employee.setText(full_name_user);
+        label_name_rol.setText(rol_user);
+        return rol_user.trim();
     }
 
     /**
@@ -44,7 +71,7 @@ public class SystemView extends javax.swing.JFrame {
         jPanelCustomers = new javax.swing.JPanel();
         jLabelCustomers = new javax.swing.JLabel();
         jPanelEmploys = new javax.swing.JPanel();
-        jLabelEmploys = new javax.swing.JLabel();
+        jLabelEmployees = new javax.swing.JLabel();
         jPanelSupplagers = new javax.swing.JPanel();
         jLabelSupplagers = new javax.swing.JLabel();
         jPanelCategorias = new javax.swing.JPanel();
@@ -61,7 +88,9 @@ public class SystemView extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         btn_foto = new javax.swing.JButton();
         btn_lagout = new javax.swing.JButton();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        label_name_employee = new javax.swing.JLabel();
+        label_name_rol = new javax.swing.JLabel();
+        jTabbedPane10 = new javax.swing.JTabbedPane();
         jPanel4 = new javax.swing.JPanel();
         jPanel12 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
@@ -330,10 +359,10 @@ public class SystemView extends javax.swing.JFrame {
 
         jPanelEmploys.setBackground(new java.awt.Color(18, 45, 61));
 
-        jLabelEmploys.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabelEmploys.setForeground(new java.awt.Color(255, 255, 255));
-        jLabelEmploys.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/employee.png"))); // NOI18N
-        jLabelEmploys.setText("  Empleados");
+        jLabelEmployees.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabelEmployees.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelEmployees.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/employee.png"))); // NOI18N
+        jLabelEmployees.setText("  Empleados");
 
         javax.swing.GroupLayout jPanelEmploysLayout = new javax.swing.GroupLayout(jPanelEmploys);
         jPanelEmploys.setLayout(jPanelEmploysLayout);
@@ -341,14 +370,14 @@ public class SystemView extends javax.swing.JFrame {
             jPanelEmploysLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelEmploysLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
-                .addComponent(jLabelEmploys, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabelEmployees, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanelEmploysLayout.setVerticalGroup(
             jPanelEmploysLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelEmploysLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabelEmploys, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabelEmployees, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -509,7 +538,20 @@ public class SystemView extends javax.swing.JFrame {
 
         btn_lagout.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btn_lagout.setText("SALIR");
+        btn_lagout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_lagoutActionPerformed(evt);
+            }
+        });
         jPanel3.add(btn_lagout, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 35, -1, 30));
+
+        label_name_employee.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        label_name_employee.setForeground(new java.awt.Color(255, 255, 255));
+        jPanel3.add(label_name_employee, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 30, 110, 20));
+
+        label_name_rol.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        label_name_rol.setForeground(new java.awt.Color(255, 255, 255));
+        jPanel3.add(label_name_rol, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 60, 110, 20));
 
         getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 0, 1010, 100));
 
@@ -643,10 +685,7 @@ public class SystemView extends javax.swing.JFrame {
 
         product_table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+
             },
             new String [] {
                 "Id", "Codigo", "Nombre", "Descripcion", "Precio de Venta", "Cantidad", "Categoria"
@@ -656,7 +695,7 @@ public class SystemView extends javax.swing.JFrame {
 
         jPanel4.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 357, 930, 130));
 
-        jTabbedPane1.addTab("Productos", jPanel4);
+        jTabbedPane10.addTab("Productos", jPanel4);
 
         jPanel5.setBackground(new java.awt.Color(152, 202, 63));
         jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -824,7 +863,7 @@ public class SystemView extends javax.swing.JFrame {
 
         jPanel5.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 350, 920, 150));
 
-        jTabbedPane1.addTab("Compras", jPanel5);
+        jTabbedPane10.addTab("Compras", jPanel5);
 
         jPanel6.setBackground(new java.awt.Color(152, 202, 63));
         jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -966,7 +1005,7 @@ public class SystemView extends javax.swing.JFrame {
 
         jPanel6.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 357, 920, 110));
 
-        jTabbedPane1.addTab("Clientes", jPanel6);
+        jTabbedPane10.addTab("Clientes", jPanel6);
 
         jPanel7.setBackground(new java.awt.Color(152, 202, 63));
         jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -1139,7 +1178,7 @@ public class SystemView extends javax.swing.JFrame {
 
         jPanel7.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 377, 910, 90));
 
-        jTabbedPane1.addTab("Empleados", jPanel7);
+        jTabbedPane10.addTab("Empleados", jPanel7);
 
         jPanel8.setBackground(new java.awt.Color(152, 202, 63));
         jPanel8.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -1298,7 +1337,7 @@ public class SystemView extends javax.swing.JFrame {
 
         jPanel8.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 360, 920, 140));
 
-        jTabbedPane1.addTab("Proveedores", jPanel8);
+        jTabbedPane10.addTab("Proveedores", jPanel8);
 
         jPanel9.setBackground(new java.awt.Color(152, 202, 63));
         jPanel9.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -1389,7 +1428,7 @@ public class SystemView extends javax.swing.JFrame {
 
         jPanel9.add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 70, 360, 220));
 
-        jTabbedPane1.addTab("Categorias", jPanel9);
+        jTabbedPane10.addTab("Categorias", jPanel9);
 
         jPanel10.setBackground(new java.awt.Color(152, 202, 63));
         jPanel10.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -1450,7 +1489,7 @@ public class SystemView extends javax.swing.JFrame {
 
         jPanel10.add(jScrollPane9, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 370, 910, 120));
 
-        jTabbedPane1.addTab("Reportes", jPanel10);
+        jTabbedPane10.addTab("Reportes", jPanel10);
 
         jPanel11.setBackground(new java.awt.Color(152, 202, 63));
         jPanel11.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -1585,7 +1624,7 @@ public class SystemView extends javax.swing.JFrame {
 
         jPanel11.add(jPanel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(35, 20, 920, 390));
 
-        jTabbedPane1.addTab("Perfil", jPanel11);
+        jTabbedPane10.addTab("Perfil", jPanel11);
 
         jPanel19.setBackground(new java.awt.Color(152, 202, 63));
         jPanel19.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -1765,9 +1804,9 @@ public class SystemView extends javax.swing.JFrame {
 
         jPanel19.add(jScrollPane8, new org.netbeans.lib.awtextra.AbsoluteConstraints(32, 420, 950, 110));
 
-        jTabbedPane1.addTab("Ventas", jPanel19);
+        jTabbedPane10.addTab("Ventas", jPanel19);
 
-        getContentPane().add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 100, 1010, 580));
+        getContentPane().add(jTabbedPane10, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 100, 1010, 580));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -1840,6 +1879,14 @@ public class SystemView extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_product_idActionPerformed
 
+    private void btn_lagoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_lagoutActionPerformed
+        if(evt.getSource() == btn_lagout) {
+            dispose();
+            LoginView login = new LoginView();
+            login.setVisible(true);
+        }
+    }//GEN-LAST:event_btn_lagoutActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1877,42 +1924,42 @@ public class SystemView extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_add_product_sale;
-    private javax.swing.JButton btn_add_product_to_buy;
-    private javax.swing.JButton btn_cancel_customer;
-    private javax.swing.JButton btn_cancel_employee;
-    private javax.swing.JButton btn_cancel_product;
-    private javax.swing.JButton btn_cancel_supplier;
-    private javax.swing.JButton btn_confirm_purchase;
+    public javax.swing.JButton btn_add_product_to_buy;
+    public javax.swing.JButton btn_cancel_customer;
+    public javax.swing.JButton btn_cancel_employee;
+    public javax.swing.JButton btn_cancel_product;
+    public javax.swing.JButton btn_cancel_supplier;
+    public javax.swing.JButton btn_confirm_purchase;
     private javax.swing.JButton btn_confirm_sale;
-    private javax.swing.JButton btn_delete_category;
-    private javax.swing.JButton btn_delete_customer;
-    private javax.swing.JButton btn_delete_employee;
-    private javax.swing.JButton btn_delete_product;
-    private javax.swing.JButton btn_delete_supplier;
+    public javax.swing.JButton btn_delete_category;
+    public javax.swing.JButton btn_delete_customer;
+    public javax.swing.JButton btn_delete_employee;
+    public javax.swing.JButton btn_delete_product;
+    public javax.swing.JButton btn_delete_supplier;
     private javax.swing.JButton btn_foto;
     private javax.swing.JButton btn_lagout;
-    private javax.swing.JToggleButton btn_modify_data;
-    private javax.swing.JButton btn_new_purchase;
+    public javax.swing.JToggleButton btn_modify_data;
+    public javax.swing.JButton btn_new_purchase;
     private javax.swing.JButton btn_new_sale;
-    private javax.swing.JButton btn_register_category;
-    private javax.swing.JButton btn_register_customer;
-    private javax.swing.JButton btn_register_employee;
-    private javax.swing.JButton btn_register_product;
-    private javax.swing.JButton btn_register_supplier;
-    private javax.swing.JButton btn_remove_purchase;
+    public javax.swing.JButton btn_register_category;
+    public javax.swing.JButton btn_register_customer;
+    public javax.swing.JButton btn_register_employee;
+    public javax.swing.JButton btn_register_product;
+    public javax.swing.JButton btn_register_supplier;
+    public javax.swing.JButton btn_remove_purchase;
     private javax.swing.JButton btn_remove_sale;
-    private javax.swing.JButton btn_update_category;
-    private javax.swing.JButton btn_update_customer;
-    private javax.swing.JButton btn_update_employee;
-    private javax.swing.JButton btn_update_product;
-    private javax.swing.JButton btn_update_supplier;
-    private javax.swing.JTable categories_table;
-    private javax.swing.JComboBox<Object> cmb_product_category;
-    private javax.swing.JComboBox<String> cmb_rol;
-    private javax.swing.JComboBox<String> cmb_supplier_city;
-    private javax.swing.JComboBox<String> cmd_purchase_supplier;
-    private javax.swing.JTable customers_table;
-    private javax.swing.JTable employees_table;
+    public javax.swing.JButton btn_update_category;
+    public javax.swing.JButton btn_update_customer;
+    public javax.swing.JButton btn_update_employee;
+    public javax.swing.JButton btn_update_product;
+    public javax.swing.JButton btn_update_supplier;
+    public javax.swing.JTable categories_table;
+    public javax.swing.JComboBox<Object> cmb_product_category;
+    public javax.swing.JComboBox<String> cmb_rol;
+    public javax.swing.JComboBox<String> cmb_supplier_city;
+    public javax.swing.JComboBox<String> cmd_purchase_supplier;
+    public javax.swing.JTable customers_table;
+    public javax.swing.JTable employees_table;
     public javax.swing.JLabel jLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -1978,7 +2025,7 @@ public class SystemView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     public javax.swing.JLabel jLabelCategorias;
     public javax.swing.JLabel jLabelCustomers;
-    public javax.swing.JLabel jLabelEmploys;
+    public javax.swing.JLabel jLabelEmployees;
     public javax.swing.JLabel jLabelProducts;
     public javax.swing.JLabel jLabelPurchises;
     public javax.swing.JLabel jLabelReports;
@@ -1989,7 +2036,7 @@ public class SystemView extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel13;
-    private javax.swing.JPanel jPanel14;
+    public javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel17;
@@ -2022,46 +2069,48 @@ public class SystemView extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JScrollPane jScrollPane9;
-    private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable product_table;
-    private javax.swing.JTable purchases_table;
+    public javax.swing.JTabbedPane jTabbedPane10;
+    public javax.swing.JLabel label_name_employee;
+    public javax.swing.JLabel label_name_rol;
+    public javax.swing.JTable product_table;
+    public javax.swing.JTable purchases_table;
     private javax.swing.JTable sales_table;
-    private javax.swing.JTable supplier_table;
-    private javax.swing.JTable table_all_purchases;
+    public javax.swing.JTable supplier_table;
+    public javax.swing.JTable table_all_purchases;
     public javax.swing.JTable table_all_purchases1;
-    private javax.swing.JTextField txt_address_profile;
-    private javax.swing.JTextField txt_caregory_name;
-    private javax.swing.JTextField txt_category_id;
-    private javax.swing.JTextField txt_customer_address;
-    private javax.swing.JTextField txt_customer_email;
-    private javax.swing.JTextField txt_customer_fullname;
-    private javax.swing.JTextField txt_customer_id;
-    private javax.swing.JTextField txt_customer_telephone;
-    private javax.swing.JTextField txt_email_profile;
-    private javax.swing.JTextField txt_employee_address;
-    private javax.swing.JTextField txt_employee_email;
-    private javax.swing.JTextField txt_employee_fullname;
-    private javax.swing.JTextField txt_employee_id;
-    private javax.swing.JPasswordField txt_employee_password;
-    private javax.swing.JTextField txt_employee_telephone;
-    private javax.swing.JTextField txt_employee_username;
-    private javax.swing.JTextField txt_id_profile;
-    private javax.swing.JTextField txt_name_profile;
-    private javax.swing.JPasswordField txt_password_modify;
-    private javax.swing.JPasswordField txt_password_modify_confirm;
-    private javax.swing.JTextField txt_phone_profile;
-    private javax.swing.JTextField txt_product_code;
-    private javax.swing.JTextField txt_product_description;
-    private javax.swing.JTextField txt_product_id;
-    private javax.swing.JTextField txt_product_name;
-    private javax.swing.JTextField txt_product_unit_price;
-    private javax.swing.JTextField txt_purchase_amount;
-    private javax.swing.JTextField txt_purchase_id;
-    private javax.swing.JTextField txt_purchase_price;
-    private javax.swing.JTextField txt_purchase_subtotal;
-    private javax.swing.JTextField txt_purchase_total_to_pay;
-    private javax.swing.JTextField txt_purshace_product_code;
-    private javax.swing.JTextField txt_purshace_product_name;
+    public javax.swing.JTextField txt_address_profile;
+    public javax.swing.JTextField txt_caregory_name;
+    public javax.swing.JTextField txt_category_id;
+    public javax.swing.JTextField txt_customer_address;
+    public javax.swing.JTextField txt_customer_email;
+    public javax.swing.JTextField txt_customer_fullname;
+    public javax.swing.JTextField txt_customer_id;
+    public javax.swing.JTextField txt_customer_telephone;
+    public javax.swing.JTextField txt_email_profile;
+    public javax.swing.JTextField txt_employee_address;
+    public javax.swing.JTextField txt_employee_email;
+    public javax.swing.JTextField txt_employee_fullname;
+    public javax.swing.JTextField txt_employee_id;
+    public javax.swing.JPasswordField txt_employee_password;
+    public javax.swing.JTextField txt_employee_telephone;
+    public javax.swing.JTextField txt_employee_username;
+    public javax.swing.JTextField txt_id_profile;
+    public javax.swing.JTextField txt_name_profile;
+    public javax.swing.JPasswordField txt_password_modify;
+    public javax.swing.JPasswordField txt_password_modify_confirm;
+    public javax.swing.JTextField txt_phone_profile;
+    public javax.swing.JTextField txt_product_code;
+    public javax.swing.JTextField txt_product_description;
+    public javax.swing.JTextField txt_product_id;
+    public javax.swing.JTextField txt_product_name;
+    public javax.swing.JTextField txt_product_unit_price;
+    public javax.swing.JTextField txt_purchase_amount;
+    public javax.swing.JTextField txt_purchase_id;
+    public javax.swing.JTextField txt_purchase_price;
+    public javax.swing.JTextField txt_purchase_subtotal;
+    public javax.swing.JTextField txt_purchase_total_to_pay;
+    public javax.swing.JTextField txt_purshace_product_code;
+    public javax.swing.JTextField txt_purshace_product_name;
     private javax.swing.JTextField txt_sale_customer_id;
     private javax.swing.JTextField txt_sale_customer_name;
     private javax.swing.JTextField txt_sale_price;
@@ -2072,16 +2121,16 @@ public class SystemView extends javax.swing.JFrame {
     private javax.swing.JTextField txt_sale_stock;
     private javax.swing.JTextField txt_sale_subtotal;
     private javax.swing.JTextField txt_sale_total_to_pay;
-    private javax.swing.JTextField txt_search_category;
-    private javax.swing.JTextField txt_search_customer;
-    private javax.swing.JTextField txt_search_employee;
-    private javax.swing.JTextField txt_search_product;
-    private javax.swing.JTextField txt_search_supplier;
-    private javax.swing.JTextField txt_supplier_address;
-    private javax.swing.JTextField txt_supplier_description;
-    private javax.swing.JTextField txt_supplier_email;
-    private javax.swing.JTextField txt_supplier_id;
-    private javax.swing.JTextField txt_supplier_name;
-    private javax.swing.JTextField txt_supplier_telephone;
+    public javax.swing.JTextField txt_search_category;
+    public javax.swing.JTextField txt_search_customer;
+    public javax.swing.JTextField txt_search_employee;
+    public javax.swing.JTextField txt_search_product;
+    public javax.swing.JTextField txt_search_supplier;
+    public javax.swing.JTextField txt_supplier_address;
+    public javax.swing.JTextField txt_supplier_description;
+    public javax.swing.JTextField txt_supplier_email;
+    public javax.swing.JTextField txt_supplier_id;
+    public javax.swing.JTextField txt_supplier_name;
+    public javax.swing.JTextField txt_supplier_telephone;
     // End of variables declaration//GEN-END:variables
 }
